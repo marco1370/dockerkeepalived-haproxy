@@ -1,0 +1,21 @@
+iversion: '3.7'
+services:
+
+    keepalived_haproxy:
+        build: .
+        volumes:
+            - /haproxy:/usr/local/etc/haproxy:ro
+            - /keepalived:/keepalived
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /root/.docker:/root/.docker
+        environment:
+            INTERFACE: "ens160"
+            STATE: "MASTER"
+            VIRTUAL_ROUTER_ID: "51"
+            PRIORITY: "101"
+            VIRTUAL_IP: "192.168.1.20"
+            VIRTUAL_MASK: "24"
+        command: [-f, /usr/local/etc/haproxy/haproxy.cfg]
+        restart: always
+        network_mode: host
+        privileged: true
